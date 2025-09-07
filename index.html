@@ -26,10 +26,10 @@
     body::before{
       content:"";
       position:fixed;
-      top:0;left:0;
-      width:100%;height:100%;
-      background:url('https://via.placeholder.com/1920x1080') center/cover no-repeat;
-      filter:blur(25px) brightness(0.35);
+      top:0; left:0;
+      width:100%; height:100%;
+      background: url('Header2.png') center/cover no-repeat;
+      filter: blur(25px) brightness(0.35);
       z-index:-1;
     }
     header{
@@ -48,7 +48,6 @@
     main{padding:16px;max-width:1100px;margin:0 auto}
     h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 
-    /* Sélecteur de catégorie */
     .category-select {
       background: var(--accent);
       color: #fff;
@@ -61,7 +60,6 @@
     }
     .category-select:hover { background: var(--accent-dark); }
 
-    /* Grille produits */
     .grid{
       display:grid;
       grid-template-columns: repeat(2, 1fr);
@@ -77,7 +75,6 @@
     .card h3{margin:0;font-size:1rem;color:#111;text-align:center}
     .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.06);color:var(--muted);font-size:13px;text-align:center;margin:auto 0 0}
 
-    /* Page produit */
     #product-page{display:none;padding-top:8px}
     .product-card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 12px 30px rgba(12,18,28,0.3)}
     .product-media{width:100%;height:260px;border-radius:10px;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
@@ -103,15 +100,11 @@
     .price{margin-top:8px;font-weight:700;font-size:1.15rem;color:var(--success)}
     .actions{display:grid;gap:10px;margin-top:12px}
     .btn{padding:12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s}
-    .btn svg{width:20px;height:20px;stroke-width:2}
     .btn:active{transform:scale(0.96)}
     .btn-buy{background:var(--success);color:white}
     .btn-contact{background:var(--accent);color:white}
     .btn-back{background:#eef2f7;color:#111}
-    #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:#0f1724;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 8px 30px rgba(2,6,23,0.4);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
-    #toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
 
-    /* POPUP */
     #categoryModal {
       position:fixed;
       top:0;left:0;
@@ -141,7 +134,6 @@
     }
     .category-btn:hover {transform:scale(1.05);}
 
-    /* Transitions page */
     .fade {transition: opacity 0.3s ease;}
     .hidden {display:none !important; opacity:0 !important;}
     .visible {display:block !important; opacity:1 !important;}
@@ -155,11 +147,11 @@
     <h2>Bienvenue chez Gravure2TesDésirs</h2>
     <div class="category-options">
       <button class="category-btn" onclick="enterShop()">
-        <img src="https://via.placeholder.com/120" alt="Produits personnalisés"/>
+        <img src="produits.jpg" alt="Produits personnalisés"/>
         Nos produits personnalisés
       </button>
       <button class="category-btn" onclick="window.open('https://t.me/k3ks9','_blank')">
-        <img src="https://via.placeholder.com/120" alt="Demande spéciale"/>
+        <img src="personnalisation.jpg" alt="Demande spéciale"/>
         Votre personnalisation gravure ajustée
       </button>
     </div>
@@ -167,7 +159,7 @@
 </div>
 
 <header>
-  <img src="https://via.placeholder.com/150x60" alt="Gravure2TesDésirs"/>
+  <img src="Header2.png" alt="Gravure2TesDésirs"/>
   <select id="categorySelect" class="category-select">
     <option value="" disabled selected>Choisir une catégorie</option>
   </select>
@@ -195,10 +187,7 @@
   </section>
 </main>
 
-<div id="toast"></div>
-
 <script>
-// Variantes
 const variants = [
   {label:"1 pièce", price:10},
   {label:"5 pièces", price:45},
@@ -206,23 +195,22 @@ const variants = [
   {label:"20 pièces", price:160}
 ];
 
-// Catégories et produits
 const categories = {
-  "Mariage / Anniversaire": [
-    { id:1, title:"Coffret Mariage", desc:"Un coffret gravé unique pour votre mariage.", media:"https://via.placeholder.com/300" },
-    { id:2, title:"Plaque Anniversaire", desc:"Un souvenir gravé pour vos proches.", media:"https://via.placeholder.com/300" }
+  "Mariage / Anniversaire":[
+    {id:1,title:"Coffret Mariage",desc:"Un coffret gravé unique pour votre mariage.",media:"Header2.png"},
+    {id:2,title:"Plaque Anniversaire",desc:"Un souvenir gravé pour vos proches.",media:"Header2.png"}
   ],
-  "Professionnel Gravure": [
-    { id:3, title:"Plaque Entreprise", desc:"Logo et texte gravés pour votre société.", media:"https://via.placeholder.com/300" }
+  "Professionnel Gravure":[
+    {id:3,title:"Plaque Entreprise",desc:"Logo et texte gravés pour votre société.",media:"Header2.png"}
   ],
-  "Gaming Gravure": [
-    { id:4, title:"Manette Personnalisée", desc:"Manette gravée selon vos envies.", media:"https://via.placeholder.com/300" }
+  "Gaming Gravure":[
+    {id:4,title:"Manette Personnalisée",desc:"Manette gravée selon vos envies.",media:"Header2.png"}
   ],
-  "Décoration Maison": [
-    { id:5, title:"Cadre Gravé", desc:"Décoration murale élégante.", media:"https://via.placeholder.com/300" }
+  "Décoration Maison":[
+    {id:5,title:"Cadre Gravé",desc:"Décoration murale élégante.",media:"Header2.png"}
   ],
-  "Demande personnalisation": [
-    { id:6, title:"Produit Unique", desc:"Créez votre gravure sur mesure.", media:"https://via.placeholder.com/300" }
+  "Demande personnalisation":[
+    {id:6,title:"Produit Unique",desc:"Créez votre gravure sur mesure.",media:"Header2.png"}
   ]
 };
 
@@ -256,68 +244,75 @@ function loadCategory(category){
   grid.innerHTML = "";
   categories[category].forEach(p=>{
     const card = document.createElement("div");
-    card.className="card";
-    card.innerHTML=`<div class="media-wrap"><img src="${p.media}" alt=""></div>
-                    <div class="card-body"><h3>${p.title}</h3><span class="badge">Voir détails</span></div>`;
-    card.onclick=()=>showProduct(p);
+    card.className = "card";
+    card.innerHTML = `<div class="media-wrap"><img src="${p.media}" alt=""></div>
+                      <div class="card-body"><h3>${p.title}</h3><span class="badge">Voir détails</span></div>`;
+    card.onclick = () => showProduct(p);
     grid.appendChild(card);
   });
 }
 
 // Afficher produit
 function showProduct(p){
-  currentProduct=p;
+  currentProduct = p;
   home.classList.add("hidden"); home.classList.remove("visible");
   productPage.classList.remove("hidden"); productPage.classList.add("visible");
-  productMedia.innerHTML=`<img src="${p.media}" alt="">`;
-  productTitle.textContent=p.title;
-  productDesc.textContent=p.desc;
-  variantsContainer.innerHTML="";
+  productMedia.innerHTML = `<img src="${p.media}" alt="">`;
+  productTitle.textContent = p.title;
+  productDesc.textContent = p.desc;
+
+  variantsContainer.innerHTML = "";
   variants.forEach((v,i)=>{
-    const btn=document.createElement("button");
-    btn.className="variant-btn"+(i===0?" selected":"");
-    btn.textContent=`${v.label} — ${v.price}€`;
-    btn.onclick=()=>selectVariant(i);
+    const btn = document.createElement("button");
+    btn.className = "variant-btn"+(i===0?" selected":"");
+    btn.textContent = `${v.label} — ${v.price}€`;
+    btn.onclick = () => selectVariant(i);
     variantsContainer.appendChild(btn);
   });
-  currentVariantIndex=0; updatePrice();
-}
-
-function selectVariant(i){
-  currentVariantIndex=i;
-  Array.from(variantsContainer.children).forEach((btn,index)=>btn.classList.toggle("selected",index===i));
+  currentVariantIndex = 0;
   updatePrice();
 }
 
-function updatePrice(){ priceDiv.textContent=variants[currentVariantIndex].price+"€"; }
+function selectVariant(i){
+  currentVariantIndex = i;
+  Array.from(variantsContainer.children).forEach((btn,index)=>{
+    btn.classList.toggle("selected", index === i);
+  });
+  updatePrice();
+}
 
-backBtn.onclick=()=>{
+function updatePrice(){
+  priceDiv.textContent = variants[currentVariantIndex].price + "€";
+}
+
+backBtn.onclick = () => {
   productPage.classList.remove("visible"); productPage.classList.add("hidden");
   home.classList.remove("hidden"); home.classList.add("visible");
 };
 
-buyBtn.onclick=()=>{
+buyBtn.onclick = () => {
   alert(`Commande envoyée pour ${currentProduct.title} — ${variants[currentVariantIndex].label} à ${variants[currentVariantIndex].price}€ !`);
 };
 
 function enterShop(){
-  document.getElementById("categoryModal").style.display="none";
+  document.getElementById("categoryModal").style.display = "none";
   loadCategory("Mariage / Anniversaire");
-  categorySelect.value="Mariage / Anniversaire";
+  categorySelect.value = "Mariage / Anniversaire";
 }
 
-categorySelect.onchange=()=>{
-  const selected=categorySelect.value;
+categorySelect.onchange = () => {
+  const selected = categorySelect.value;
   if(!selected) return;
   if(!productPage.classList.contains("hidden")){
     productPage.classList.remove("visible"); productPage.classList.add("hidden");
     setTimeout(()=>{
       home.classList.remove("hidden"); home.classList.add("visible");
       loadCategory(selected);
-    },300);
-  } else { loadCategory(selected); }
+    }, 300);
+  } else {
+    loadCategory(selected);
+  }
 };
 </script>
-
 </body>
 </html>
