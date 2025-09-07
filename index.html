@@ -28,7 +28,7 @@
       position:fixed;
       top:0;left:0;
       width:100%;height:100%;
-      background:url('Header2.png') center/cover no-repeat;
+      background:url('https://via.placeholder.com/1920x1080') center/cover no-repeat;
       filter:blur(25px) brightness(0.35);
       z-index:-1;
     }
@@ -59,16 +59,14 @@
       cursor: pointer;
       transition: background .2s;
     }
-    .category-select:hover {
-      background: var(--accent-dark);
-    }
+    .category-select:hover { background: var(--accent-dark); }
 
     /* Grille produits */
     .grid{
       display:grid;
       grid-template-columns: repeat(2, 1fr);
       gap:var(--gap);
-      margin-bottom:18px
+      margin-bottom:18px;
     }
 
     .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 18px rgba(12,18,28,0.3);cursor:pointer;display:flex;flex-direction:column;transition:transform .16s,box-shadow .16s}
@@ -157,11 +155,11 @@
     <h2>Bienvenue chez Gravure2TesDésirs</h2>
     <div class="category-options">
       <button class="category-btn" onclick="enterShop()">
-        <img src="produits.jpg" alt="Produits personnalisés"/>
+        <img src="https://via.placeholder.com/120" alt="Produits personnalisés"/>
         Nos produits personnalisés
       </button>
       <button class="category-btn" onclick="window.open('https://t.me/k3ks9','_blank')">
-        <img src="personnalisation.jpg" alt="Demande spéciale"/>
+        <img src="https://via.placeholder.com/120" alt="Demande spéciale"/>
         Votre personnalisation gravure ajustée
       </button>
     </div>
@@ -169,7 +167,7 @@
 </div>
 
 <header>
-  <img src="Header2.png" alt="Gravure2TesDésirs"/>
+  <img src="https://via.placeholder.com/150x60" alt="Gravure2TesDésirs"/>
   <select id="categorySelect" class="category-select">
     <option value="" disabled selected>Choisir une catégorie</option>
   </select>
@@ -199,7 +197,6 @@
 
 <div id="toast"></div>
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
 // Variantes
 const variants = [
@@ -212,20 +209,20 @@ const variants = [
 // Catégories et produits
 const categories = {
   "Mariage / Anniversaire": [
-    { id:1, title:"Coffret Mariage", desc:"Un coffret gravé unique pour votre mariage.", media:"Header2.png" },
-    { id:2, title:"Plaque Anniversaire", desc:"Un souvenir gravé pour vos proches.", media:"Header2.png" }
+    { id:1, title:"Coffret Mariage", desc:"Un coffret gravé unique pour votre mariage.", media:"https://via.placeholder.com/300" },
+    { id:2, title:"Plaque Anniversaire", desc:"Un souvenir gravé pour vos proches.", media:"https://via.placeholder.com/300" }
   ],
   "Professionnel Gravure": [
-    { id:3, title:"Plaque Entreprise", desc:"Logo et texte gravés pour votre société.", media:"Header2.png" }
+    { id:3, title:"Plaque Entreprise", desc:"Logo et texte gravés pour votre société.", media:"https://via.placeholder.com/300" }
   ],
   "Gaming Gravure": [
-    { id:4, title:"Manette Personnalisée", desc:"Manette gravée selon vos envies.", media:"Header2.png" }
+    { id:4, title:"Manette Personnalisée", desc:"Manette gravée selon vos envies.", media:"https://via.placeholder.com/300" }
   ],
   "Décoration Maison": [
-    { id:5, title:"Cadre Gravé", desc:"Décoration murale élégante.", media:"Header2.png" }
+    { id:5, title:"Cadre Gravé", desc:"Décoration murale élégante.", media:"https://via.placeholder.com/300" }
   ],
   "Demande personnalisation": [
-    { id:6, title:"Produit Unique", desc:"Créez votre gravure sur mesure.", media:"Header2.png" }
+    { id:6, title:"Produit Unique", desc:"Créez votre gravure sur mesure.", media:"https://via.placeholder.com/300" }
   ]
 };
 
@@ -244,10 +241,9 @@ const categorySelect = document.getElementById("categorySelect");
 
 let currentProduct = null;
 let currentVariantIndex = 0;
-let currentCategory = null;
 
 // Remplir menu déroulant
-Object.keys(categories).forEach(cat => {
+Object.keys(categories).forEach(cat=>{
   const opt = document.createElement("option");
   opt.value = cat;
   opt.textContent = cat;
@@ -256,99 +252,70 @@ Object.keys(categories).forEach(cat => {
 
 // Charger catégorie
 function loadCategory(category){
-  currentCategory = category;
-  grid.innerHTML = "";
   categoryTitle.textContent = category;
-
-  const products = categories[category] || [];
-  products.forEach(p=>{
+  grid.innerHTML = "";
+  categories[category].forEach(p=>{
     const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="media-wrap">
-        <img src="${p.media}" alt="">
-      </div>
-      <div class="card-body">
-        <h3>${p.title}</h3>
-        <span class="badge">Voir détails</span>
-      </div>`;
-    card.onclick = () => showProduct(p);
+    card.className="card";
+    card.innerHTML=`<div class="media-wrap"><img src="${p.media}" alt=""></div>
+                    <div class="card-body"><h3>${p.title}</h3><span class="badge">Voir détails</span></div>`;
+    card.onclick=()=>showProduct(p);
     grid.appendChild(card);
   });
 }
 
 // Afficher produit
 function showProduct(p){
-  currentProduct = p;
-  home.classList.add("hidden");
-  productPage.classList.remove("hidden");
-  productPage.classList.add("visible");
-
-  productMedia.innerHTML = `<img src="${p.media}" alt="">`;
-  productTitle.textContent = p.title;
-  productDesc.textContent = p.desc;
-
-  variantsContainer.innerHTML = "";
-  variants.forEach((v,index)=>{
-    const btn = document.createElement("button");
-    btn.className = "variant-btn" + (index===0?" selected":"");
-    btn.textContent = `${v.label} — ${v.price}€`;
-    btn.onclick = ()=>selectVariant(index);
+  currentProduct=p;
+  home.classList.add("hidden"); home.classList.remove("visible");
+  productPage.classList.remove("hidden"); productPage.classList.add("visible");
+  productMedia.innerHTML=`<img src="${p.media}" alt="">`;
+  productTitle.textContent=p.title;
+  productDesc.textContent=p.desc;
+  variantsContainer.innerHTML="";
+  variants.forEach((v,i)=>{
+    const btn=document.createElement("button");
+    btn.className="variant-btn"+(i===0?" selected":"");
+    btn.textContent=`${v.label} — ${v.price}€`;
+    btn.onclick=()=>selectVariant(i);
     variantsContainer.appendChild(btn);
   });
+  currentVariantIndex=0; updatePrice();
+}
 
-  currentVariantIndex = 0;
+function selectVariant(i){
+  currentVariantIndex=i;
+  Array.from(variantsContainer.children).forEach((btn,index)=>btn.classList.toggle("selected",index===i));
   updatePrice();
 }
 
-// Variantes
-function selectVariant(index){
-  currentVariantIndex = index;
-  Array.from(variantsContainer.children).forEach((btn,i)=>{
-    btn.classList.toggle("selected", i===index);
-  });
-  updatePrice();
-}
-function updatePrice(){
-  priceDiv.textContent = variants[currentVariantIndex].price + "€";
-}
+function updatePrice(){ priceDiv.textContent=variants[currentVariantIndex].price+"€"; }
 
-// Retour
-backBtn.onclick = ()=>{
-  productPage.classList.remove("visible");
-  productPage.classList.add("hidden");
-  home.classList.remove("hidden");
-  home.classList.add("visible");
+backBtn.onclick=()=>{
+  productPage.classList.remove("visible"); productPage.classList.add("hidden");
+  home.classList.remove("hidden"); home.classList.add("visible");
 };
 
-// Acheter
-buyBtn.onclick = ()=>{
+buyBtn.onclick=()=>{
   alert(`Commande envoyée pour ${currentProduct.title} — ${variants[currentVariantIndex].label} à ${variants[currentVariantIndex].price}€ !`);
 };
 
-// Popup accueil
 function enterShop(){
   document.getElementById("categoryModal").style.display="none";
   loadCategory("Mariage / Anniversaire");
   categorySelect.value="Mariage / Anniversaire";
 }
 
-// Menu déroulant avec retour automatique sur page liste
-categorySelect.onchange = ()=>{
-  const selectedCat = categorySelect.value;
-  if(!selectedCat) return;
-
+categorySelect.onchange=()=>{
+  const selected=categorySelect.value;
+  if(!selected) return;
   if(!productPage.classList.contains("hidden")){
-    productPage.classList.remove("visible");
-    productPage.classList.add("hidden");
+    productPage.classList.remove("visible"); productPage.classList.add("hidden");
     setTimeout(()=>{
-      home.classList.remove("hidden");
-      home.classList.add("visible");
-      loadCategory(selectedCat);
-    }, 300);
-  }else{
-    loadCategory(selectedCat);
-  }
+      home.classList.remove("hidden"); home.classList.add("visible");
+      loadCategory(selected);
+    },300);
+  } else { loadCategory(selected); }
 };
 </script>
 
