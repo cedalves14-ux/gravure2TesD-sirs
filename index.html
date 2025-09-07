@@ -1,439 +1,342 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<title>Gravure2TesDésirs — Boutique Telegram</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-:root{
-  --bg:#0f0f1a;
-  --card:#ffffff;
-  --accent:#00ff66;
-  --accent-dark:#009944;
-  --success:#28a745;
-  --muted:#6b7280;
-  --radius:12px;
-  --gap:14px;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Inter,"Segoe UI",Arial,sans-serif;
-  background:var(--bg);
-  color:#fff;
-  position:relative;
-}
-body::before{
-  content:"";
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: url('Header2.png') center/cover no-repeat;
-  filter: blur(25px) brightness(0.35);
-  z-index:-1;
-}
-header{
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.3);
-}
-header img{height:60px;object-fit:contain;display:block}
-header .lang-select{display:flex;gap:6px;align-items:center;}
-header .lang-select img{width:28px;height:18px;cursor:pointer;object-fit:cover;border:1px solid #fff;border-radius:3px;}
-main{padding:16px;max-width:1100px;margin:0 auto}
-h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
-
-.category-select {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background .2s;
-}
-.category-select:hover { background: var(--accent-dark); }
-
-.grid{
-  display:grid;
-  grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
-  gap:var(--gap);
-  margin-bottom:18px;
-}
-
-.card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 18px rgba(12,18,28,0.3);cursor:pointer;display:flex;flex-direction:column;transition:transform .16s,box-shadow .16s}
-.card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 14px 30px rgba(12,18,28,0.5)}
-.media-wrap{height:140px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center}
-.media-wrap img,.media-wrap video{width:100%;height:100%;object-fit:cover}
-.card-body{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1;justify-content:space-between}
-.card h3{margin:0;font-size:1rem;color:#111;text-align:center}
-.badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.06);color:var(--muted);font-size:13px;text-align:center;margin:auto 0 0}
-
-#product-page{display:none;padding-top:8px}
-.product-card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 12px 30px rgba(12,18,28,0.3)}
-.product-media{width:100%;height:260px;border-radius:10px;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-.product-media img,.product-media video{width:100%;height:100%;object-fit:cover}
-.desc{color:var(--muted);line-height:1.45;margin-bottom:8px}
-.variants, .variants-quantity{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.variant-btn{
-  padding:8px;
-  border-radius:12px;
-  border:none;
-  cursor:pointer;
-  font-weight:600;
-  background:#f3f6f9;
-  color:#111;
-  transition: transform 0.2s, background 0.2s, color 0.2s;
-  flex:1 1 calc(50% - 8px);
-  text-align:center;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  min-height:80px;
-}
-.variant-btn.selected{
-  background:var(--accent);
-  color:white;
-  transform: scale(1.05);
-}
-.variant-btn img{
-  width:100%;
-  max-width:120px;
-  border-radius:8px;
-  margin-bottom:6px;
-}
-.price{margin-top:8px;font-weight:700;font-size:1.15rem;color:var(--success)}
-.actions{display:grid;gap:10px;margin-top:12px}
-.btn{padding:12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s}
-.btn:active{transform:scale(0.96)}
-.btn-buy{background:var(--success);color:white}
-.btn-contact{background:var(--accent);color:white}
-.btn-back{background:#eef2f7;color:#111}
-
-#categoryModal {
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:rgba(0,0,0,0.85);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:100;
-}
-.modal-content {
-  background:#1f1f2e;
-  padding:24px;
-  border-radius:16px;
-  text-align:center;
-  box-shadow:0 10px 40px rgba(0,0,0,0.6);
-  max-width:400px;
-}
-.modal-content h2 {margin-bottom:20px;color:#fff;}
-.category-options {display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}
-.category-btn {
-  border:none;background:none;cursor:pointer;text-align:center;
-  color:#fff;font-weight:700;transition:transform .2s;
-}
-.category-btn img {
-  width:120px;height:120px;border-radius:12px;object-fit:cover;display:block;margin-bottom:8px;
-}
-.category-btn:hover {transform:scale(1.05);}
-
-#uploadedPreview{margin-top:10px;max-width:100%;border-radius:8px;}
-
-.fade {transition: opacity 0.3s ease;}
-.hidden {display:none !important; opacity:0 !important;}
-.visible {display:block !important; opacity:1 !important;}
-
-@media(max-width:600px){
-  .variant-btn{flex:1 1 100%; min-height:70px;}
-  .grid{grid-template-columns:1fr;}
-}
-</style>
+  <meta charset="utf-8" />
+  <title>Gravure2TesDésirs — Boutique Telegram</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f0f1a;
+      --card:#ffffff;
+      --accent:#00ff66;
+      --accent-dark:#009944;
+      --success:#28a745;
+      --muted:#6b7280;
+      --radius:12px;
+      --gap:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,"Segoe UI",Arial,sans-serif;
+      background:var(--bg);
+      color:#fff;
+      position:relative;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      top:0;left:0;
+      width:100%;height:100%;
+      background:url('header2.png') center/cover no-repeat;
+      filter:blur(25px) brightness(0.35);
+      z-index:-1;
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:40;
+      background:rgba(0,0,0,0.6);
+      backdrop-filter:blur(4px);
+      padding:8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 1px 0 rgba(0,0,0,0.3);
+    }
+    header img{height:60px;object-fit:contain;display:block}
+    .language-switch{display:flex;gap:8px;align-items:center}
+    .language-switch img{width:30px;height:20px;cursor:pointer;border:1px solid #ccc;border-radius:3px;}
+    main{padding:16px;max-width:1100px;margin:0 auto}
+    h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
+    .category-select {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .category-select:hover {background: var(--accent-dark);}
+    .grid{display:grid;grid-template-columns: repeat(2, 1fr);gap:var(--gap);margin-bottom:18px}
+    .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 18px rgba(12,18,28,0.3);cursor:pointer;display:flex;flex-direction:column;transition:transform .16s,box-shadow .16s}
+    .card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 14px 30px rgba(12,18,28,0.5)}
+    .media-wrap{height:140px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center}
+    .media-wrap img,.media-wrap video{width:100%;height:100%;object-fit:cover}
+    .card-body{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1;justify-content:space-between}
+    .card h3{margin:0;font-size:1rem;color:#111;text-align:center}
+    .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.06);color:var(--muted);font-size:13px;text-align:center;margin:auto 0 0}
+    #product-page{display:none;padding-top:8px}
+    .product-card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 12px 30px rgba(12,18,28,0.3)}
+    .product-media{width:100%;height:260px;border-radius:10px;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+    .product-media img,.product-media video{width:100%;height:100%;object-fit:cover}
+    .desc{color:var(--muted);line-height:1.45;margin-bottom:8px}
+    .variants{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    .variant-btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600;background:#f3f6f9;color:#111;transition:transform .1s, background .2s, color .2s;flex:1 1 calc(50% - 8px);text-align:center;}
+    .variant-btn.selected{background:var(--accent);color:white;}
+    .price{margin-top:8px;font-weight:700;font-size:1.15rem;color:var(--success)}
+    .actions{display:grid;gap:10px;margin-top:12px}
+    .btn{padding:12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s}
+    .btn:active{transform:scale(0.96)}
+    .btn-buy{background:var(--success);color:white}
+    .btn-contact{background:var(--accent);color:white}
+    .btn-back{background:#eef2f7;color:#111}
+    #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:#0f1724;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 8px 30px rgba(2,6,23,0.4);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+    #toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+    #categoryModal {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:100;}
+    .modal-content {background:#1f1f2e;padding:24px;border-radius:16px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.6);max-width:400px;}
+    .modal-content h2 {margin-bottom:20px;color:#fff;}
+    .category-options {display:flex;gap:20px;justify-content:center;}
+    .category-btn {border:none;background:none;cursor:pointer;text-align:center;color:#fff;font-weight:700;transition:transform .2s;}
+    .category-btn img {width:120px;height:120px;border-radius:12px;object-fit:cover;display:block;margin-bottom:8px;}
+    .category-btn:hover {transform:scale(1.05);}
+  </style>
 </head>
 <body>
 
+<!-- POPUP -->
 <div id="categoryModal">
   <div class="modal-content">
-    <h2 id="welcome-text">Bienvenue chez Gravure2TesDésirs</h2>
+    <h2 data-i18n="welcome">Bienvenue chez Gravure2TesDésirs</h2>
     <div class="category-options">
-      <button class="category-btn" onclick="enterShop()">
-        <img src="produitsgravés.jpg" alt="Produits personnalisés"/>
-        <span id="btn-personalized">Nos produits personnalisés</span>
+      <button class="category-btn" id="btnProduits">
+        <img src="produits.jpg" alt="Produits personnalisés"/>
+        <span data-i18n="ourProducts">Nos produits personnalisés</span>
       </button>
-      <button class="category-btn" onclick="window.open('https://t.me/k3ks9','_blank')">
-        <img src="personnalisation sur demande.jpg" alt="Demande spéciale"/>
-        <span id="btn-special">Votre personnalisation gravure ajustée</span>
+      <button class="category-btn" id="btnPersonnalisation">
+        <img src="personnalisation.jpg" alt="Demande spéciale"/>
+        <span data-i18n="customRequest">Votre personnalisation gravure ajustée</span>
       </button>
     </div>
   </div>
 </div>
 
 <header>
-  <img src="Header2.png" alt="Gravure2TesDésirs"/>
-  <div class="lang-select">
-    <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="English" onclick="setLanguage('en')">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="Español" onclick="setLanguage('es')">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg" alt="Português" onclick="setLanguage('pt')">
+  <img src="header2.png" alt="Gravure2TesDésirs"/>
+  <div class="language-switch">
+    <img src="flags/fr.png" alt="FR" data-lang="fr">
+    <img src="flags/en.png" alt="EN" data-lang="en">
+    <img src="flags/es.png" alt="ES" data-lang="es">
+    <img src="flags/pt.png" alt="PT" data-lang="pt">
   </div>
   <select id="categorySelect" class="category-select">
-    <option value="" disabled selected>Choisir une catégorie</option>
+    <option value="" disabled selected data-i18n="chooseCategory">Choisir une catégorie</option>
   </select>
 </header>
 
 <main>
-  <section id="home-page" class="fade visible">
-    <h2 id="category-title">Produits disponibles</h2>
+  <section id="home-page">
+    <h2 id="category-title" data-i18n="availableProducts">Produits disponibles</h2>
     <div class="grid" id="products-grid"></div>
   </section>
 
-  <section id="product-page" class="fade hidden">
+  <section id="product-page">
     <div class="product-card">
       <div class="product-media" id="product-media"></div>
       <h3 id="product-title"></h3>
       <p class="desc" id="product-desc"></p>
       <div class="variants" id="variants-container"></div>
-      <div class="variants-quantity" id="variants-quantity"></div>
-
-      <div style="margin-top:12px;">
-        <label for="customUpload" style="font-weight:600;" id="label-upload">Envoyez votre gravure :</label>
-        <input type="file" id="customUpload" accept="image/*" style="display:block;margin-top:6px;" />
-        <img id="uploadedPreview" src="" alt="" class="hidden"/>
-      </div>
-
       <div class="price" id="price"></div>
       <div class="actions">
-        <button class="btn btn-buy" id="buyBtn">Envoyer ma demande à Gravure2TesDésirs</button>
-        <a href="https://t.me/k3ks9" target="_blank" class="btn btn-contact">Contact Telegram</a>
-        <button class="btn btn-back" id="backBtn">← Retour</button>
+        <button class="btn btn-buy" id="buyBtn" data-i18n="buyBtn">Envoyer ma demande à Gravure2TesDésirs</button>
+        <a href="https://t.me/k3ks9" target="_blank" class="btn btn-contact" data-i18n="contactTelegram">Contact Telegram</a>
+        <button class="btn btn-back" id="backBtn" data-i18n="backBtn">← Retour</button>
       </div>
     </div>
   </section>
 </main>
 
+<div id="toast"></div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-// --- VARIABLES ---
-const variants = [
-  {label:"1 pièce", price:10},
-  {label:"5 pièces", price:45},
-  {label:"10 pièces", price:85},
-  {label:"20 pièces", price:160}
-];
+  const translations = {
+    fr:{
+      welcome: "Bienvenue chez Gravure2TesDésirs",
+      ourProducts: "Nos produits personnalisés",
+      customRequest: "Votre personnalisation gravure ajustée",
+      chooseCategory: "Choisir une catégorie",
+      availableProducts: "Produits disponibles",
+      buyBtn: "Envoyer ma demande à Gravure2TesDésirs",
+      contactTelegram: "Contact Telegram",
+      backBtn: "← Retour"
+    },
+    en:{
+      welcome: "Welcome to Gravure2TesDésirs",
+      ourProducts: "Our personalized products",
+      customRequest: "Your custom engraving request",
+      chooseCategory: "Choose a category",
+      availableProducts: "Available products",
+      buyBtn: "Send my request to Gravure2TesDésirs",
+      contactTelegram: "Telegram Contact",
+      backBtn: "← Back"
+    },
+    es:{
+      welcome: "Bienvenido a Gravure2TesDésirs",
+      ourProducts: "Nuestros productos personalizados",
+      customRequest: "Su solicitud de grabado personalizado",
+      chooseCategory: "Elegir categoría",
+      availableProducts: "Productos disponibles",
+      buyBtn: "Enviar mi solicitud a Gravure2TesDésirs",
+      contactTelegram: "Contacto Telegram",
+      backBtn: "← Volver"
+    },
+    pt:{
+      welcome: "Bem-vindo à Gravure2TesDésirs",
+      ourProducts: "Nossos produtos personalizados",
+      customRequest: "Sua solicitação de gravação personalizada",
+      chooseCategory: "Escolher categoria",
+      availableProducts: "Produtos disponíveis",
+      buyBtn: "Enviar meu pedido para Gravure2TesDésirs",
+      contactTelegram: "Contato Telegram",
+      backBtn: "← Voltar"
+    }
+  };
 
-const categories = {
-  "Mariage / Anniversaire":[
-    {id:1,title:"Coffret Mariage",desc:"Un coffret gravé unique pour votre mariage.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Cœur"}, {img:"model2.png", name:"Fleurs"}]},
-    {id:2,title:"Plaque Anniversaire",desc:"Un souvenir gravé pour vos proches.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Chiffres"}, {img:"model2.png", name:"Ballons"}]}
-  ],
-  "Professionnel Gravure":[
-    {id:3,title:"Plaque Entreprise",desc:"Logo et texte gravés pour votre société.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Logo"}, {img:"model2.png", name:"Texte"}]}
-  ],
-  "Gaming Gravure":[
-    {id:4,title:"Gravure verre trempé PC Gaming",desc:"Vitre de votre PC Gamer personnalisable.",media:"gravureonepiece.png",
-     models:[{img:"model1.png", name:"Dragon"}, {img:"model2.png", name:"Skull"}, {img:"model3.png", name:"Logo Perso"}]}
-  ],
-  "Décoration Maison":[
-    {id:5,title:"Cadre Gravé",desc:"Décoration murale élégante.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Maison"}, {img:"model2.png", name:"Arbre"}]}
-  ],
-  "Demande personnalisation":[
-    {id:6,title:"Produit Unique",desc:"Créez votre gravure sur mesure.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Libre"}]}
-  ]
-};
+  const variants = [
+    {label:"1 pièce", price:10},
+    {label:"5 pièces", price:45},
+    {label:"10 pièces", price:85},
+    {label:"20 pièces", price:160}
+  ];
 
-// --- DOM ---
-const grid = document.getElementById("products-grid");
-const home = document.getElementById("home-page");
-const productPage = document.getElementById("product-page");
-const productMedia = document.getElementById("product-media");
-const productTitle = document.getElementById("product-title");
-const productDesc = document.getElementById("product-desc");
-const variantsContainer = document.getElementById("variants-container");
-const variantsQuantity = document.getElementById("variants-quantity");
-const priceDiv = document.getElementById("price");
-const buyBtn = document.getElementById("buyBtn");
-const backBtn = document.getElementById("backBtn");
-const categoryTitle = document.getElementById("category-title");
-const categorySelect = document.getElementById("categorySelect");
-const customUpload = document.getElementById("customUpload");
-const uploadedPreview = document.getElementById("uploadedPreview");
+  const categories = {
+    "Mariage / Anniversaire": [
+      { id:1, title:"Coffret Mariage", desc:"Un coffret gravé unique pour votre mariage.", media:"header2.png" },
+      { id:2, title:"Plaque Anniversaire", desc:"Un souvenir gravé pour vos proches.", media:"header2.png" }
+    ],
+    "Professionnel Gravure": [
+      { id:3, title:"Plaque Entreprise", desc:"Logo et texte gravés pour votre société.", media:"header2.png" }
+    ],
+    "Gaming Gravure": [
+      { id:4, title:"Manette Personnalisée", desc:"Manette gravée selon vos envies.", media:"header2.png" }
+    ],
+    "Décoration Maison": [
+      { id:5, title:"Cadre Gravé", desc:"Décoration murale élégante.", media:"header2.png" }
+    ],
+    "Demande personnalisation": [
+      { id:6, title:"Produit Unique", desc:"Créez votre gravure sur mesure.", media:"header2.png" }
+    ]
+  };
 
-let currentProduct = null;
-let currentModelIndex = 0;
-let currentVariantIndex = 0;
-let uploadedFile = null;
+  let currentProduct = null;
+  let currentVariantIndex = 0;
+  let currentCategory = null;
+  let currentLang = "fr";
 
-// --- FONCTIONS ---
-// Remplir menu déroulant
-Object.keys(categories).forEach(cat=>{
-  const opt = document.createElement("option");
-  opt.value = cat;
-  opt.textContent = cat;
-  categorySelect.appendChild(opt);
-});
+  const grid = document.getElementById("products-grid");
+  const home = document.getElementById("home-page");
+  const productPage = document.getElementById("product-page");
+  const productMedia = document.getElementById("product-media");
+  const productTitle = document.getElementById("product-title");
+  const productDesc = document.getElementById("product-desc");
+  const variantsContainer = document.getElementById("variants-container");
+  const priceDiv = document.getElementById("price");
+  const buyBtn = document.getElementById("buyBtn");
+  const backBtn = document.getElementById("backBtn");
+  const categoryTitle = document.getElementById("category-title");
+  const categorySelect = document.getElementById("categorySelect");
 
-// Charger catégorie
-function loadCategory(category){
-  categoryTitle.textContent = category;
-  grid.innerHTML = "";
-  categories[category].forEach(p=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `<div class="media-wrap"><img src="${p.media}" alt=""></div>
-                      <div class="card-body"><h3>${p.title}</h3><span class="badge">Voir détails</span></div>`;
-    card.onclick = () => showProduct(p);
-    grid.appendChild(card);
-  });
-}
-
-// Afficher produit
-function showProduct(p){
-  currentProduct = p;
-  home.classList.add("hidden"); home.classList.remove("visible");
-  productPage.classList.remove("hidden"); productPage.classList.add("visible");
-  productMedia.innerHTML = `<img src="${p.media}" alt="">`;
-  productTitle.textContent = p.title;
-  productDesc.textContent = p.desc;
-
-  // Modèles
-  variantsContainer.innerHTML = "";
-  currentModelIndex = 0;
-  if(p.models){
-    p.models.forEach((m,i)=>{
-      const btn = document.createElement("button");
-      btn.className = "variant-btn"+(i===0?" selected":"");
-      btn.innerHTML = `<img src="${m.img}" alt="${m.name}"><div>${m.name}</div>`;
-      btn.onclick = () => selectModel(i);
-      variantsContainer.appendChild(btn);
+  function translatePage() {
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const key = el.getAttribute("data-i18n");
+      if(translations[currentLang][key]) el.textContent = translations[currentLang][key];
     });
   }
 
-  // Quantité
-  variantsQuantity.innerHTML = "";
-  currentVariantIndex = 0;
-  variants.forEach((v,i)=>{
-    const btn = document.createElement("button");
-    btn.className = "variant-btn"+(i===0?" selected":"");
-    btn.textContent = `${v.label} — ${v.price}€`;
-    btn.onclick = () => selectVariant(i);
-    variantsQuantity.appendChild(btn);
+  // Drpeaux
+  document.querySelectorAll(".language-switch img").forEach(flag=>{
+    flag.addEventListener("click", ()=> {
+      currentLang = flag.dataset.lang;
+      translatePage();
+    });
   });
 
-  uploadedPreview.src = "";
-  uploadedPreview.classList.add("hidden");
-  uploadedFile = null;
-
-  updatePrice();
-}
-
-// Sélection modèle
-function selectModel(i){
-  currentModelIndex = i;
-  Array.from(variantsContainer.children).forEach((btn,index)=>{
-    btn.classList.toggle("selected", index === i);
+  Object.keys(categories).forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat;
+    categorySelect.appendChild(opt);
   });
-}
 
-// Sélection quantité
-function selectVariant(i){
-  currentVariantIndex = i;
-  Array.from(variantsQuantity.children).forEach((btn,index)=>{
-    btn.classList.toggle("selected", index === i);
+  function loadCategory(category){
+    currentCategory = category;
+    grid.innerHTML = "";
+    categoryTitle.textContent = category;
+    const products = categories[category] || [];
+    products.forEach(p=>{
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="media-wrap">
+          <img src="${p.media}" alt="">
+        </div>
+        <div class="card-body">
+          <h3>${p.title}</h3>
+          <span class="badge" data-i18n="viewDetails">Voir détails</span>
+        </div>`;
+      card.onclick = () => showProduct(p);
+      grid.appendChild(card);
+    });
+  }
+
+  function showProduct(p){
+    currentProduct = p;
+    home.style.display = "none";
+    productPage.style.display = "block";
+    productMedia.innerHTML = `<img src="${p.media}" alt="">`;
+    productTitle.textContent = p.title;
+    productDesc.textContent = p.desc;
+
+    variantsContainer.innerHTML = "";
+    variants.forEach((v, index) => {
+      const btn = document.createElement("button");
+      btn.className = "variant-btn" + (index === 0 ? " selected" : "");
+      btn.textContent = `${v.label} — ${v.price}€`;
+      btn.onclick = () => selectVariant(index);
+      variantsContainer.appendChild(btn);
+    });
+
+    currentVariantIndex = 0;
+    updatePrice();
+  }
+
+  function selectVariant(index){
+    currentVariantIndex = index;
+    Array.from(variantsContainer.children).forEach((btn, i) => {
+      btn.classList.toggle("selected", i === index);
+    });
+    updatePrice();
+  }
+
+  function updatePrice(){ priceDiv.textContent = variants[currentVariantIndex].price + "€"; }
+
+  backBtn.onclick = () => { home.style.display="block"; productPage.style.display="none"; };
+
+  buyBtn.onclick = () => {
+    alert(`${currentProduct.title} — ${variants[currentVariantIndex].label} : ${variants[currentVariantIndex].price}€`);
+  };
+
+  // POPUP
+  document.getElementById("btnProduits").addEventListener("click", ()=>{
+    document.getElementById("categoryModal").style.display="none";
+    loadCategory("Mariage / Anniversaire");
+    categorySelect.value = "Mariage / Anniversaire";
   });
-  updatePrice();
-}
+  document.getElementById("btnPersonnalisation").addEventListener("click", ()=>{
+    window.open('https://t.me/k3ks9','_blank');
+  });
 
-// Prix
-function updatePrice(){
-  priceDiv.textContent = variants[currentVariantIndex].price + "€";
-}
+  categorySelect.onchange = () => {
+    const selectedCat = categorySelect.value;
+    if(selectedCat) loadCategory(selectedCat);
+  };
 
-// Retour
-backBtn.onclick = () => {
-  productPage.classList.remove("visible"); productPage.classList.add("hidden");
-  home.classList.remove("hidden"); home.classList.add("visible");
-};
-
-// Upload image avec aperçu
-customUpload.onchange = (e)=>{
-  uploadedFile = e.target.files[0];
-  if(uploadedFile){
-    const reader = new FileReader();
-    reader.onload = function(event){
-      uploadedPreview.src = event.target.result;
-      uploadedPreview.classList.remove("hidden");
-    }
-    reader.readAsDataURL(uploadedFile);
-  } else {
-    uploadedPreview.src = "";
-    uploadedPreview.classList.add("hidden");
-  }
-};
-
-// Envoyer commande Telegram
-buyBtn.onclick = () => {
-  let msg = `Commande pour ${currentProduct.title}`;
-  if(currentProduct.models && currentProduct.models[currentModelIndex]){
-    msg += ` — Modèle : ${currentProduct.models[currentModelIndex].name}`;
-  }
-  msg += ` — ${variants[currentVariantIndex].label} à ${variants[currentVariantIndex].price}€`;
-  if(uploadedFile){
-    msg += `\nFichier uploadé : ${uploadedFile.name}`;
-  }
-  const telegramLink = `https://t.me/k3ks9?text=${encodeURIComponent(msg)}`;
-  window.open(telegramLink, "_blank");
-};
-
-// Entrer boutique
-function enterShop(){
-  document.getElementById("categoryModal").style.display = "none";
-  loadCategory("Mariage / Anniversaire");
-  categorySelect.value = "Mariage / Anniversaire";
-}
-
-// Changement catégorie
-categorySelect.onchange = () => {
-  const selected = categorySelect.value;
-  if(!selected) return;
-  if(!productPage.classList.contains("hidden")){
-    productPage.classList.remove("visible"); productPage.classList.add("hidden");
-    setTimeout(()=>{
-      home.classList.remove("hidden"); home.classList.add("visible");
-      loadCategory(selected);
-    }, 300);
-  } else {
-    loadCategory(selected);
-  }
-};
-
-// --- TRADUCTION ---
-const translations = {
-  fr:{welcome:"Bienvenue chez Gravure2TesDésirs", btnPersonalized:"Nos produits personnalisés", btnSpecial:"Votre personnalisation gravure ajustée", upload:"Envoyez votre gravure :"},
-  en:{welcome:"Welcome to Gravure2TesDésirs", btnPersonalized:"Our personalized products", btnSpecial:"Your custom engraving request", upload:"Upload your engraving:"},
-  es:{welcome:"Bienvenido a Gravure2TesDésirs", btnPersonalized:"Nuestros productos personalizados", btnSpecial:"Su solicitud de grabado personalizado", upload:"Sube tu grabado:"},
-  pt:{welcome:"Bem-vindo ao Gravure2TesDésirs", btnPersonalized:"Nossos produtos personalizados", btnSpecial:"Seu pedido de gravação personalizada", upload:"Envie sua gravação:"}
-};
-function setLanguage(lang){
-  const t = translations[lang];
-  document.getElementById("welcome-text").textContent = t.welcome;
-  document.getElementById("btn-personalized").textContent = t.btnPersonalized;
-  document.getElementById("btn-special").textContent = t.btnSpecial;
-  document.getElementById("label-upload").textContent = t.upload;
-}
-// Initialisation langue FR
-setLanguage('fr');
+  // Traduire au chargement
+  translatePage();
 </script>
+
 </body>
 </html>
