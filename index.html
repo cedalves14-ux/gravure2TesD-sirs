@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
+<meta charset="utf-8">
 <title>Gravure2TesDésirs — Boutique Telegram</title>
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 :root{
   --bg:#0f0f1a;
@@ -62,7 +62,7 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 
 .grid{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
   gap:var(--gap);
   margin-bottom:18px;
 }
@@ -82,28 +82,31 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 .desc{color:var(--muted);line-height:1.45;margin-bottom:8px}
 .variants, .variants-quantity{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
 .variant-btn{
-  padding:6px;
-  border-radius:10px;
+  padding:8px;
+  border-radius:12px;
   border:none;
   cursor:pointer;
   font-weight:600;
   background:#f3f6f9;
   color:#111;
-  transition:transform .1s, background .2s, color .2s;
+  transition: transform 0.2s, background 0.2s, color 0.2s;
   flex:1 1 calc(50% - 8px);
   text-align:center;
   display:flex;
   flex-direction:column;
   align-items:center;
+  min-height:80px;
 }
 .variant-btn.selected{
   background:var(--accent);
   color:white;
+  transform: scale(1.05);
 }
 .variant-btn img{
   width:100%;
+  max-width:120px;
   border-radius:8px;
-  margin-bottom:4px;
+  margin-bottom:6px;
 }
 .price{margin-top:8px;font-weight:700;font-size:1.15rem;color:var(--success)}
 .actions{display:grid;gap:10px;margin-top:12px}
@@ -132,7 +135,7 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
   max-width:400px;
 }
 .modal-content h2 {margin-bottom:20px;color:#fff;}
-.category-options {display:flex;gap:20px;justify-content:center;}
+.category-options {display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}
 .category-btn {
   border:none;background:none;cursor:pointer;text-align:center;
   color:#fff;font-weight:700;transition:transform .2s;
@@ -145,6 +148,11 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 .fade {transition: opacity 0.3s ease;}
 .hidden {display:none !important; opacity:0 !important;}
 .visible {display:block !important; opacity:1 !important;}
+
+@media(max-width:600px){
+  .variant-btn{flex:1 1 100%; min-height:70px;}
+  .grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -186,7 +194,6 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
       <div class="variants" id="variants-container"></div>
       <div class="variants-quantity" id="variants-quantity"></div>
 
-      <!-- Upload d'image -->
       <div style="margin-top:12px;">
         <label for="customUpload" style="font-weight:600;">Envoyez votre gravure :</label>
         <input type="file" id="customUpload" accept="image/*" style="display:block;margin-top:6px;" />
@@ -203,6 +210,7 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 </main>
 
 <script>
+// Variants et catégories
 const variants = [
   {label:"1 pièce", price:10},
   {label:"5 pièces", price:45},
@@ -221,16 +229,12 @@ const categories = {
   ],
   "Professionnel Gravure":[
     {id:3,title:"Plaque Entreprise",desc:"Logo et texte gravés pour votre société.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Logo Standard"}, {img:"model2.png", name:"Texte"}]
+     models:[{img:"model1.png", name:"Logo"}, {img:"model2.png", name:"Texte"}]
     }
   ],
   "Gaming Gravure":[
-    {id:4,title:"Gravure verre trempé PC Gaming",desc:"La vitre de votre PC Gamer personnalisable à vos souhaits.",media:"gravureonepiece.png",
-     models:[
-       {img:"model1.png", name:"Dragon"},
-       {img:"model2.png", name:"Skull"},
-       {img:"model3.png", name:"Logo Perso"}
-     ]
+    {id:4,title:"Gravure verre trempé PC Gaming",desc:"Vitre de votre PC Gamer personnalisable.",media:"gravureonepiece.png",
+     models:[{img:"model1.png", name:"Dragon"}, {img:"model2.png", name:"Skull"}, {img:"model3.png", name:"Logo Perso"}]
     }
   ],
   "Décoration Maison":[
@@ -245,6 +249,7 @@ const categories = {
   ]
 };
 
+// DOM Elements
 const grid = document.getElementById("products-grid");
 const home = document.getElementById("home-page");
 const productPage = document.getElementById("product-page");
@@ -347,9 +352,6 @@ backBtn.onclick = () => {
 
 customUpload.onchange = (e)=>{
   uploadedFile = e.target.files[0];
-  if(uploadedFile){
-    alert(`Fichier sélectionné : ${uploadedFile.name}`);
-  }
 };
 
 buyBtn.onclick = () => {
@@ -385,5 +387,6 @@ categorySelect.onchange = () => {
   }
 };
 </script>
+
 </body>
 </html>
