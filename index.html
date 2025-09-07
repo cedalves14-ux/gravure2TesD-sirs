@@ -102,11 +102,11 @@
     <h2 data-i18n="welcome">Bienvenue chez Gravure2TesDésirs</h2>
     <div class="category-options">
       <button class="category-btn" id="btnProduits">
-        <img src="produits.jpg" alt="Produits personnalisés"/>
+        <img src="https://flagcdn.com/w320/fr.png" alt="Produits personnalisés"/>
         <span data-i18n="ourProducts">Nos produits personnalisés</span>
       </button>
       <button class="category-btn" id="btnPersonnalisation">
-        <img src="personnalisation.jpg" alt="Demande spéciale"/>
+        <img src="https://flagcdn.com/w320/fr.png" alt="Demande spéciale"/>
         <span data-i18n="customRequest">Votre personnalisation gravure ajustée</span>
       </button>
     </div>
@@ -116,10 +116,10 @@
 <header>
   <img src="header2.png" alt="Gravure2TesDésirs"/>
   <div class="language-switch">
-    <img src="flags/fr.png" alt="FR" data-lang="fr">
-    <img src="flags/en.png" alt="EN" data-lang="en">
-    <img src="flags/es.png" alt="ES" data-lang="es">
-    <img src="flags/pt.png" alt="PT" data-lang="pt">
+    <img src="https://flagcdn.com/w20/fr.png" alt="FR" data-lang="fr">
+    <img src="https://flagcdn.com/w20/gb.png" alt="EN" data-lang="en">
+    <img src="https://flagcdn.com/w20/es.png" alt="ES" data-lang="es">
+    <img src="https://flagcdn.com/w20/pt.png" alt="PT" data-lang="pt">
   </div>
   <select id="categorySelect" class="category-select">
     <option value="" disabled selected data-i18n="chooseCategory">Choisir une catégorie</option>
@@ -152,79 +152,54 @@
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
+  // Traductions globales
   const translations = {
-    fr:{
-      welcome: "Bienvenue chez Gravure2TesDésirs",
-      ourProducts: "Nos produits personnalisés",
-      customRequest: "Votre personnalisation gravure ajustée",
-      chooseCategory: "Choisir une catégorie",
-      availableProducts: "Produits disponibles",
-      buyBtn: "Envoyer ma demande à Gravure2TesDésirs",
-      contactTelegram: "Contact Telegram",
-      backBtn: "← Retour"
+    fr:{ welcome:"Bienvenue chez Gravure2TesDésirs", ourProducts:"Nos produits personnalisés", customRequest:"Votre personnalisation gravure ajustée", chooseCategory:"Choisir une catégorie", availableProducts:"Produits disponibles", buyBtn:"Envoyer ma demande à Gravure2TesDésirs", contactTelegram:"Contact Telegram", backBtn:"← Retour" },
+    en:{ welcome:"Welcome to Gravure2TesDésirs", ourProducts:"Our personalized products", customRequest:"Your custom engraving request", chooseCategory:"Choose a category", availableProducts:"Available products", buyBtn:"Send my request to Gravure2TesDésirs", contactTelegram:"Telegram Contact", backBtn:"← Back" },
+    es:{ welcome:"Bienvenido a Gravure2TesDésirs", ourProducts:"Nuestros productos personalizados", customRequest:"Su solicitud de grabado personalizado", chooseCategory:"Elegir categoría", availableProducts:"Productos disponibles", buyBtn:"Enviar mi solicitud a Gravure2TesDésirs", contactTelegram:"Contacto Telegram", backBtn:"← Volver" },
+    pt:{ welcome:"Bem-vindo à Gravure2TesDésirs", ourProducts:"Nossos produtos personalizados", customRequest:"Sua solicitação de gravação personalizada", chooseCategory:"Escolher categoria", availableProducts:"Produtos disponíveis", buyBtn:"Enviar meu pedido para Gravure2TesDésirs", contactTelegram:"Contato Telegram", backBtn:"← Voltar" }
+  };
+
+  const productTranslations = {
+    "Mariage / Anniversaire": {
+      fr:[ {title:"Coffret Mariage", desc:"Un coffret gravé unique pour votre mariage."}, {title:"Plaque Anniversaire", desc:"Un souvenir gravé pour vos proches."} ],
+      en:[ {title:"Wedding Box", desc:"A unique engraved box for your wedding."}, {title:"Birthday Plaque", desc:"A memorable engraved gift for your loved ones."} ],
+      es:[ {title:"Caja de Boda", desc:"Una caja grabada única para su boda."}, {title:"Placa de Cumpleaños", desc:"Un recuerdo grabado para sus seres queridos."} ],
+      pt:[ {title:"Caixa de Casamento", desc:"Uma caixa gravada única para seu casamento."}, {title:"Placa de Aniversário", desc:"Uma lembrança gravada para seus entes queridos."} ]
     },
-    en:{
-      welcome: "Welcome to Gravure2TesDésirs",
-      ourProducts: "Our personalized products",
-      customRequest: "Your custom engraving request",
-      chooseCategory: "Choose a category",
-      availableProducts: "Available products",
-      buyBtn: "Send my request to Gravure2TesDésirs",
-      contactTelegram: "Telegram Contact",
-      backBtn: "← Back"
+    "Professionnel Gravure": {
+      fr:[ {title:"Plaque Entreprise", desc:"Logo et texte gravés pour votre société."} ],
+      en:[ {title:"Company Plaque", desc:"Logo and text engraved for your company."} ],
+      es:[ {title:"Placa de Empresa", desc:"Logo y texto grabados para su empresa."} ],
+      pt:[ {title:"Placa Empresarial", desc:"Logo e texto gravados para sua empresa."} ]
     },
-    es:{
-      welcome: "Bienvenido a Gravure2TesDésirs",
-      ourProducts: "Nuestros productos personalizados",
-      customRequest: "Su solicitud de grabado personalizado",
-      chooseCategory: "Elegir categoría",
-      availableProducts: "Productos disponibles",
-      buyBtn: "Enviar mi solicitud a Gravure2TesDésirs",
-      contactTelegram: "Contacto Telegram",
-      backBtn: "← Volver"
+    "Gaming Gravure": {
+      fr:[ {title:"Manette Personnalisée", desc:"Manette gravée selon vos envies."} ],
+      en:[ {title:"Custom Controller", desc:"Controller engraved to your liking."} ],
+      es:[ {title:"Mando Personalizado", desc:"Mando grabado según tus deseos."} ],
+      pt:[ {title:"Controle Personalizado", desc:"Controle gravado de acordo com suas preferências."} ]
     },
-    pt:{
-      welcome: "Bem-vindo à Gravure2TesDésirs",
-      ourProducts: "Nossos produtos personalizados",
-      customRequest: "Sua solicitação de gravação personalizada",
-      chooseCategory: "Escolher categoria",
-      availableProducts: "Produtos disponíveis",
-      buyBtn: "Enviar meu pedido para Gravure2TesDésirs",
-      contactTelegram: "Contato Telegram",
-      backBtn: "← Voltar"
+    "Décoration Maison": {
+      fr:[ {title:"Cadre Gravé", desc:"Décoration murale élégante."} ],
+      en:[ {title:"Engraved Frame", desc:"Elegant wall decoration."} ],
+      es:[ {title:"Marco Grabado", desc:"Decoración de pared elegante."} ],
+      pt:[ {title:"Moldura Gravada", desc:"Decoração de parede elegante."} ]
+    },
+    "Demande personnalisation": {
+      fr:[ {title:"Produit Unique", desc:"Créez votre gravure sur mesure."} ],
+      en:[ {title:"Unique Product", desc:"Create your custom engraving."} ],
+      es:[ {title:"Producto Único", desc:"Crea tu grabado personalizado."} ],
+      pt:[ {title:"Produto Único", desc:"Crie sua gravação personalizada."} ]
     }
   };
 
-  const variants = [
-    {label:"1 pièce", price:10},
-    {label:"5 pièces", price:45},
-    {label:"10 pièces", price:85},
-    {label:"20 pièces", price:160}
-  ];
+  const categories = Object.keys(productTranslations);
 
-  const categories = {
-    "Mariage / Anniversaire": [
-      { id:1, title:"Coffret Mariage", desc:"Un coffret gravé unique pour votre mariage.", media:"header2.png" },
-      { id:2, title:"Plaque Anniversaire", desc:"Un souvenir gravé pour vos proches.", media:"header2.png" }
-    ],
-    "Professionnel Gravure": [
-      { id:3, title:"Plaque Entreprise", desc:"Logo et texte gravés pour votre société.", media:"header2.png" }
-    ],
-    "Gaming Gravure": [
-      { id:4, title:"Manette Personnalisée", desc:"Manette gravée selon vos envies.", media:"header2.png" }
-    ],
-    "Décoration Maison": [
-      { id:5, title:"Cadre Gravé", desc:"Décoration murale élégante.", media:"header2.png" }
-    ],
-    "Demande personnalisation": [
-      { id:6, title:"Produit Unique", desc:"Créez votre gravure sur mesure.", media:"header2.png" }
-    ]
-  };
+  const variants = [ {label:"1 pièce", price:10}, {label:"5 pièces", price:45}, {label:"10 pièces", price:85}, {label:"20 pièces", price:160} ];
 
-  let currentProduct = null;
-  let currentVariantIndex = 0;
-  let currentCategory = null;
   let currentLang = "fr";
+  let currentCategory = null;
+  let currentProductIndex = 0;
 
   const grid = document.getElementById("products-grid");
   const home = document.getElementById("home-page");
@@ -244,6 +219,11 @@
       const key = el.getAttribute("data-i18n");
       if(translations[currentLang][key]) el.textContent = translations[currentLang][key];
     });
+    // Traduire la catégorie et les produits si une catégorie est ouverte
+    if(currentCategory){
+      categoryTitle.textContent = currentCategory;
+      showProductByIndex(currentProductIndex);
+    }
   }
 
   // Drpeaux
@@ -254,7 +234,7 @@
     });
   });
 
-  Object.keys(categories).forEach(cat => {
+  Object.keys(productTranslations).forEach(cat => {
     const opt = document.createElement("option");
     opt.value = cat;
     opt.textContent = cat;
@@ -265,61 +245,59 @@
     currentCategory = category;
     grid.innerHTML = "";
     categoryTitle.textContent = category;
-    const products = categories[category] || [];
-    products.forEach(p=>{
+    const products = productTranslations[category][currentLang];
+    products.forEach((p, index)=>{
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
         <div class="media-wrap">
-          <img src="${p.media}" alt="">
+          <img src="Header2.png" alt="">
         </div>
         <div class="card-body">
           <h3>${p.title}</h3>
-          <span class="badge" data-i18n="viewDetails">Voir détails</span>
+          <span class="badge">Voir détails</span>
         </div>`;
-      card.onclick = () => showProduct(p);
+      card.onclick = () => showProductByIndex(index);
       grid.appendChild(card);
     });
+    home.style.display = "block";
+    productPage.style.display = "none";
   }
 
-  function showProduct(p){
-    currentProduct = p;
+  function showProductByIndex(index){
+    currentProductIndex = index;
+    const p = productTranslations[currentCategory][currentLang][index];
     home.style.display = "none";
     productPage.style.display = "block";
-    productMedia.innerHTML = `<img src="${p.media}" alt="">`;
+    productMedia.innerHTML = `<img src="Header2.png" alt="">`;
     productTitle.textContent = p.title;
     productDesc.textContent = p.desc;
 
     variantsContainer.innerHTML = "";
-    variants.forEach((v, index) => {
+    variants.forEach((v, idx) => {
       const btn = document.createElement("button");
-      btn.className = "variant-btn" + (index === 0 ? " selected" : "");
+      btn.className = "variant-btn" + (idx === 0 ? " selected" : "");
       btn.textContent = `${v.label} — ${v.price}€`;
-      btn.onclick = () => selectVariant(index);
+      btn.onclick = () => selectVariant(idx);
       variantsContainer.appendChild(btn);
     });
-
     currentVariantIndex = 0;
     updatePrice();
   }
 
-  function selectVariant(index){
-    currentVariantIndex = index;
-    Array.from(variantsContainer.children).forEach((btn, i) => {
-      btn.classList.toggle("selected", i === index);
+  function selectVariant(idx){
+    currentVariantIndex = idx;
+    Array.from(variantsContainer.children).forEach((btn,i)=>{
+      btn.classList.toggle("selected", i===idx);
     });
     updatePrice();
   }
 
-  function updatePrice(){ priceDiv.textContent = variants[currentVariantIndex].price + "€"; }
+  function updatePrice(){ priceDiv.textContent = variants[currentVariantIndex].price+"€"; }
 
-  backBtn.onclick = () => { home.style.display="block"; productPage.style.display="none"; };
+  backBtn.onclick = ()=>{ home.style.display="block"; productPage.style.display="none"; };
+  buyBtn.onclick = ()=>{ alert(`${productTranslations[currentCategory][currentLang][currentProductIndex].title} — ${variants[currentVariantIndex].label} : ${variants[currentVariantIndex].price}€`); }
 
-  buyBtn.onclick = () => {
-    alert(`${currentProduct.title} — ${variants[currentVariantIndex].label} : ${variants[currentVariantIndex].price}€`);
-  };
-
-  // POPUP
   document.getElementById("btnProduits").addEventListener("click", ()=>{
     document.getElementById("categoryModal").style.display="none";
     loadCategory("Mariage / Anniversaire");
@@ -329,12 +307,8 @@
     window.open('https://t.me/k3ks9','_blank');
   });
 
-  categorySelect.onchange = () => {
-    const selectedCat = categorySelect.value;
-    if(selectedCat) loadCategory(selectedCat);
-  };
+  categorySelect.onchange = ()=>{ loadCategory(categorySelect.value); }
 
-  // Traduire au chargement
   translatePage();
 </script>
 
