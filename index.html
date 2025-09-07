@@ -33,16 +33,16 @@
       z-index:-1;
     }
     header{
-      position:sticky;
-      top:0;
-      z-index:40;
-      background:rgba(0,0,0,0.6);
-      backdrop-filter:blur(4px);
-      padding:8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      box-shadow:0 1px 0 rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.3);
     }
     header img{height:60px;object-fit:contain;display:block}
     main{padding:16px;max-width:1100px;margin:0 auto}
@@ -141,7 +141,6 @@
 </head>
 <body>
 
-<!-- POPUP -->
 <div id="categoryModal">
   <div class="modal-content">
     <h2>Bienvenue chez Gravure2TesDésirs</h2>
@@ -238,7 +237,6 @@ Object.keys(categories).forEach(cat=>{
   categorySelect.appendChild(opt);
 });
 
-// Charger catégorie
 function loadCategory(category){
   categoryTitle.textContent = category;
   grid.innerHTML = "";
@@ -252,7 +250,6 @@ function loadCategory(category){
   });
 }
 
-// Afficher produit
 function showProduct(p){
   currentProduct = p;
   home.classList.add("hidden"); home.classList.remove("visible");
