@@ -203,7 +203,7 @@ const categories = {
     {id:3,title:"Plaque Entreprise",desc:"Logo et texte gravés pour votre société.",media:"Header2.png"}
   ],
   "Gaming Gravure":[
-    {id:4,title:"Manette Personnalisée",desc:"Manette gravée selon vos envies.",media:"Header2.png"}
+    {id:4,title:"Gravure verre trempé PC Gaming ",desc:"La vitre de votre PC Gamer personnalisable à vos souhaits.",media:"gravureonepiece.png"}
   ],
   "Décoration Maison":[
     {id:5,title:"Cadre Gravé",desc:"Décoration murale élégante.",media:"Header2.png"}
