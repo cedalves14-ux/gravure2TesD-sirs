@@ -209,13 +209,20 @@ const variants = [
   {label:"20 pièces", price:160}
 ];
 
+// Ajouter un tableau "models" pour tous les produits
 const categories = {
   "Mariage / Anniversaire":[
-    {id:1,title:"Coffret Mariage",desc:"Un coffret gravé unique pour votre mariage.",media:"Header2.png"},
-    {id:2,title:"Plaque Anniversaire",desc:"Un souvenir gravé pour vos proches.",media:"Header2.png"}
+    {id:1,title:"Coffret Mariage",desc:"Un coffret gravé unique pour votre mariage.",media:"Header2.png",
+     models:[{img:"model1.png", name:"Cœur"}, {img:"model2.png", name:"Fleurs"}]
+    },
+    {id:2,title:"Plaque Anniversaire",desc:"Un souvenir gravé pour vos proches.",media:"Header2.png",
+     models:[{img:"model1.png", name:"Chiffres"}, {img:"model2.png", name:"Ballons"}]
+    }
   ],
   "Professionnel Gravure":[
-    {id:3,title:"Plaque Entreprise",desc:"Logo et texte gravés pour votre société.",media:"Header2.png"}
+    {id:3,title:"Plaque Entreprise",desc:"Logo et texte gravés pour votre société.",media:"Header2.png",
+     models:[{img:"model1.png", name:"Logo Standard"}, {img:"model2.png", name:"Texte"}]
+    }
   ],
   "Gaming Gravure":[
     {id:4,title:"Gravure verre trempé PC Gaming",desc:"La vitre de votre PC Gamer personnalisable à vos souhaits.",media:"gravureonepiece.png",
@@ -227,10 +234,14 @@ const categories = {
     }
   ],
   "Décoration Maison":[
-    {id:5,title:"Cadre Gravé",desc:"Décoration murale élégante.",media:"Header2.png"}
+    {id:5,title:"Cadre Gravé",desc:"Décoration murale élégante.",media:"Header2.png",
+     models:[{img:"model1.png", name:"Maison"}, {img:"model2.png", name:"Arbre"}]
+    }
   ],
   "Demande personnalisation":[
-    {id:6,title:"Produit Unique",desc:"Créez votre gravure sur mesure.",media:"Header2.png"}
+    {id:6,title:"Produit Unique",desc:"Créez votre gravure sur mesure.",media:"Header2.png",
+     models:[{img:"model1.png", name:"Libre"}]
+    }
   ]
 };
 
@@ -285,7 +296,7 @@ function showProduct(p){
   variantsContainer.innerHTML = "";
   currentModelIndex = 0;
 
-  // Si le produit a des modèles, afficher les images
+  // Affichage des modèles si définis
   if(p.models){
     p.models.forEach((m,i)=>{
       const btn = document.createElement("button");
@@ -316,24 +327,28 @@ backBtn.onclick = () => {
   home.classList.remove("hidden"); home.classList.add("visible");
 };
 
-buyBtn.onclick = () => {
-  let msg = `Commande pour ${currentProduct.title}`;
-  if(currentProduct.models && currentProduct.models[currentModelIndex]){
-    msg += ` — Modèle : ${currentProduct.models[currentModelIndex].name}`;
-  }
-  msg += ` — ${variants[currentVariantIndex].label} à ${variants[currentVariantIndex].price}€ !`;
-
-  if(uploadedFile){
-    msg += `\nFichier uploadé : ${uploadedFile.name}`;
-  }
-  alert(msg);
-};
-
 customUpload.onchange = (e)=>{
   uploadedFile = e.target.files[0];
   if(uploadedFile){
     alert(`Fichier sélectionné : ${uploadedFile.name}`);
   }
+};
+
+// Bouton d'achat -> envoi vers Telegram via lien prérempli
+buyBtn.onclick = () => {
+  let msg = `Commande pour ${currentProduct.title}`;
+  if(currentProduct.models && currentProduct.models[currentModelIndex]){
+    msg += ` — Modèle : ${currentProduct.models[currentModelIndex].name}`;
+  }
+  msg += ` — ${variants[currentVariantIndex].label} à ${variants[currentVariantIndex].price}€`;
+
+  if(uploadedFile){
+    msg += `\nFichier uploadé : ${uploadedFile.name}`;
+  }
+
+  // Préparer un lien Telegram avec message pré-rempli
+  const telegramLink = `https://t.me/k3ks9?text=${encodeURIComponent(msg)}`;
+  window.open(telegramLink, "_blank");
 };
 
 function enterShop(){
