@@ -426,10 +426,11 @@ const translations = {
   pt:{welcome:"Bem-vindo ao Gravure2TesDésirs", btnPersonalized:"Nossos produtos personalizados", btnSpecial:"Seu pedido de gravação personalizada", upload:"Envie sua gravação:"}
 };
 function setLanguage(lang){
-  document.getElementById("welcome-text").textContent = translations[lang].welcome;
-  document.getElementById("btn-personalized").textContent = translations[lang].btnPersonalized;
-  document.getElementById("btn-special").textContent = translations[lang].btnSpecial;
-  document.getElementById("label-upload").textContent = translations[lang].upload;
+  const t = translations[lang];
+  document.getElementById("welcome-text").textContent = t.welcome;
+  document.getElementById("btn-personalized").textContent = t.btnPersonalized;
+  document.getElementById("btn-special").textContent = t.btnSpecial;
+  document.getElementById("label-upload").textContent = t.upload;
 }
 // Initialisation langue FR
 setLanguage('fr');
