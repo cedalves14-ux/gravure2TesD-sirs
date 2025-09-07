@@ -180,9 +180,9 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 <header>
   <img src="Header2.png" alt="Gravure2TesDésirs"/>
   <div class="lang-select">
-    <img src="en.png" alt="English" onclick="setLanguage('en')">
-    <img src="es.png" alt="Español" onclick="setLanguage('es')">
-    <img src="pt.png" alt="Português" onclick="setLanguage('pt')">
+    <img src="https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg" alt="English" onclick="setLanguage('en')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="Español" onclick="setLanguage('es')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg" alt="Português" onclick="setLanguage('pt')">
   </div>
   <select id="categorySelect" class="category-select">
     <option value="" disabled selected>Choisir une catégorie</option>
@@ -276,7 +276,6 @@ let currentVariantIndex = 0;
 let uploadedFile = null;
 
 // --- FONCTIONS ---
-
 // Remplir menu déroulant
 Object.keys(categories).forEach(cat=>{
   const opt = document.createElement("option");
@@ -285,7 +284,7 @@ Object.keys(categories).forEach(cat=>{
   categorySelect.appendChild(opt);
 });
 
-// Charger une catégorie
+// Charger catégorie
 function loadCategory(category){
   categoryTitle.textContent = category;
   grid.innerHTML = "";
@@ -299,7 +298,7 @@ function loadCategory(category){
   });
 }
 
-// Afficher fiche produit
+// Afficher produit
 function showProduct(p){
   currentProduct = p;
   home.classList.add("hidden"); home.classList.remove("visible");
@@ -356,7 +355,7 @@ function selectVariant(i){
   updatePrice();
 }
 
-// Mettre à jour prix
+// Prix
 function updatePrice(){
   priceDiv.textContent = variants[currentVariantIndex].price + "€";
 }
@@ -383,7 +382,7 @@ customUpload.onchange = (e)=>{
   }
 };
 
-// Envoyer commande vers Telegram
+// Envoyer commande Telegram
 buyBtn.onclick = () => {
   let msg = `Commande pour ${currentProduct.title}`;
   if(currentProduct.models && currentProduct.models[currentModelIndex]){
@@ -417,42 +416,23 @@ categorySelect.onchange = () => {
   } else {
     loadCategory(selected);
   }
-}
+};
 
 // --- TRADUCTION ---
 const translations = {
-  fr:{
-    welcome:"Bienvenue chez Gravure2TesDésirs",
-    btnPersonalized:"Nos produits personnalisés",
-    btnSpecial:"Votre personnalisation gravure ajustée",
-    upload:"Envoyez votre gravure :"
-  },
-  en:{
-    welcome:"Welcome to Gravure2TesDésirs",
-    btnPersonalized:"Our personalized products",
-    btnSpecial:"Your custom engraving request",
-    upload:"Upload your engraving:"
-  },
-  es:{
-    welcome:"Bienvenido a Gravure2TesDésirs",
-    btnPersonalized:"Nuestros productos personalizados",
-    btnSpecial:"Su solicitud de grabado personalizado",
-    upload:"Sube tu grabado:"
-  },
-  pt:{
-    welcome:"Bem-vindo ao Gravure2TesDésirs",
-    btnPersonalized:"Nossos produtos personalizados",
-    btnSpecial:"Seu pedido de gravação personalizada",
-    upload:"Envie sua gravação:"
-  }
+  fr:{welcome:"Bienvenue chez Gravure2TesDésirs", btnPersonalized:"Nos produits personnalisés", btnSpecial:"Votre personnalisation gravure ajustée", upload:"Envoyez votre gravure :"},
+  en:{welcome:"Welcome to Gravure2TesDésirs", btnPersonalized:"Our personalized products", btnSpecial:"Your custom engraving request", upload:"Upload your engraving:"},
+  es:{welcome:"Bienvenido a Gravure2TesDésirs", btnPersonalized:"Nuestros productos personalizados", btnSpecial:"Su solicitud de grabado personalizado", upload:"Sube tu grabado:"},
+  pt:{welcome:"Bem-vindo ao Gravure2TesDésirs", btnPersonalized:"Nossos produtos personalizados", btnSpecial:"Seu pedido de gravação personalizada", upload:"Envie sua gravação:"}
 };
-
 function setLanguage(lang){
   document.getElementById("welcome-text").textContent = translations[lang].welcome;
   document.getElementById("btn-personalized").textContent = translations[lang].btnPersonalized;
   document.getElementById("btn-special").textContent = translations[lang].btnSpecial;
   document.getElementById("label-upload").textContent = translations[lang].upload;
 }
+// Initialisation langue FR
+setLanguage('fr');
 </script>
 </body>
 </html>
