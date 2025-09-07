@@ -45,6 +45,8 @@ header{
   box-shadow: 0 1px 0 rgba(0,0,0,0.3);
 }
 header img{height:60px;object-fit:contain;display:block}
+header .lang-select{display:flex;gap:6px;align-items:center;}
+header .lang-select img{width:28px;height:18px;cursor:pointer;object-fit:cover;border:1px solid #fff;border-radius:3px;}
 main{padding:16px;max-width:1100px;margin:0 auto}
 h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 
@@ -145,6 +147,8 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 }
 .category-btn:hover {transform:scale(1.05);}
 
+#uploadedPreview{margin-top:10px;max-width:100%;border-radius:8px;}
+
 .fade {transition: opacity 0.3s ease;}
 .hidden {display:none !important; opacity:0 !important;}
 .visible {display:block !important; opacity:1 !important;}
@@ -159,15 +163,15 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 
 <div id="categoryModal">
   <div class="modal-content">
-    <h2>Bienvenue chez Gravure2TesDésirs</h2>
+    <h2 id="welcome-text">Bienvenue chez Gravure2TesDésirs</h2>
     <div class="category-options">
       <button class="category-btn" onclick="enterShop()">
         <img src="produitsgravés.jpg" alt="Produits personnalisés"/>
-        Nos produits personnalisés
+        <span id="btn-personalized">Nos produits personnalisés</span>
       </button>
       <button class="category-btn" onclick="window.open('https://t.me/k3ks9','_blank')">
         <img src="personnalisation sur demande.jpg" alt="Demande spéciale"/>
-        Votre personnalisation gravure ajustée
+        <span id="btn-special">Votre personnalisation gravure ajustée</span>
       </button>
     </div>
   </div>
@@ -175,6 +179,11 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 
 <header>
   <img src="Header2.png" alt="Gravure2TesDésirs"/>
+  <div class="lang-select">
+    <img src="en.png" alt="English" onclick="setLanguage('en')">
+    <img src="es.png" alt="Español" onclick="setLanguage('es')">
+    <img src="pt.png" alt="Português" onclick="setLanguage('pt')">
+  </div>
   <select id="categorySelect" class="category-select">
     <option value="" disabled selected>Choisir une catégorie</option>
   </select>
@@ -195,8 +204,9 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
       <div class="variants-quantity" id="variants-quantity"></div>
 
       <div style="margin-top:12px;">
-        <label for="customUpload" style="font-weight:600;">Envoyez votre gravure :</label>
+        <label for="customUpload" style="font-weight:600;" id="label-upload">Envoyez votre gravure :</label>
         <input type="file" id="customUpload" accept="image/*" style="display:block;margin-top:6px;" />
+        <img id="uploadedPreview" src="" alt="" class="hidden"/>
       </div>
 
       <div class="price" id="price"></div>
@@ -210,7 +220,7 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 </main>
 
 <script>
-// Variants et catégories
+// --- VARIABLES ---
 const variants = [
   {label:"1 pièce", price:10},
   {label:"5 pièces", price:45},
@@ -221,35 +231,29 @@ const variants = [
 const categories = {
   "Mariage / Anniversaire":[
     {id:1,title:"Coffret Mariage",desc:"Un coffret gravé unique pour votre mariage.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Cœur"}, {img:"model2.png", name:"Fleurs"}]
-    },
+     models:[{img:"model1.png", name:"Cœur"}, {img:"model2.png", name:"Fleurs"}]},
     {id:2,title:"Plaque Anniversaire",desc:"Un souvenir gravé pour vos proches.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Chiffres"}, {img:"model2.png", name:"Ballons"}]
-    }
+     models:[{img:"model1.png", name:"Chiffres"}, {img:"model2.png", name:"Ballons"}]}
   ],
   "Professionnel Gravure":[
     {id:3,title:"Plaque Entreprise",desc:"Logo et texte gravés pour votre société.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Logo"}, {img:"model2.png", name:"Texte"}]
-    }
+     models:[{img:"model1.png", name:"Logo"}, {img:"model2.png", name:"Texte"}]}
   ],
   "Gaming Gravure":[
     {id:4,title:"Gravure verre trempé PC Gaming",desc:"Vitre de votre PC Gamer personnalisable.",media:"gravureonepiece.png",
-     models:[{img:"model1.png", name:"Dragon"}, {img:"model2.png", name:"Skull"}, {img:"model3.png", name:"Logo Perso"}]
-    }
+     models:[{img:"model1.png", name:"Dragon"}, {img:"model2.png", name:"Skull"}, {img:"model3.png", name:"Logo Perso"}]}
   ],
   "Décoration Maison":[
     {id:5,title:"Cadre Gravé",desc:"Décoration murale élégante.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Maison"}, {img:"model2.png", name:"Arbre"}]
-    }
+     models:[{img:"model1.png", name:"Maison"}, {img:"model2.png", name:"Arbre"}]}
   ],
   "Demande personnalisation":[
     {id:6,title:"Produit Unique",desc:"Créez votre gravure sur mesure.",media:"Header2.png",
-     models:[{img:"model1.png", name:"Libre"}]
-    }
+     models:[{img:"model1.png", name:"Libre"}]}
   ]
 };
 
-// DOM Elements
+// --- DOM ---
 const grid = document.getElementById("products-grid");
 const home = document.getElementById("home-page");
 const productPage = document.getElementById("product-page");
@@ -264,11 +268,14 @@ const backBtn = document.getElementById("backBtn");
 const categoryTitle = document.getElementById("category-title");
 const categorySelect = document.getElementById("categorySelect");
 const customUpload = document.getElementById("customUpload");
+const uploadedPreview = document.getElementById("uploadedPreview");
 
 let currentProduct = null;
 let currentModelIndex = 0;
 let currentVariantIndex = 0;
 let uploadedFile = null;
+
+// --- FONCTIONS ---
 
 // Remplir menu déroulant
 Object.keys(categories).forEach(cat=>{
@@ -278,6 +285,7 @@ Object.keys(categories).forEach(cat=>{
   categorySelect.appendChild(opt);
 });
 
+// Charger une catégorie
 function loadCategory(category){
   categoryTitle.textContent = category;
   grid.innerHTML = "";
@@ -291,6 +299,7 @@ function loadCategory(category){
   });
 }
 
+// Afficher fiche produit
 function showProduct(p){
   currentProduct = p;
   home.classList.add("hidden"); home.classList.remove("visible");
@@ -323,9 +332,14 @@ function showProduct(p){
     variantsQuantity.appendChild(btn);
   });
 
+  uploadedPreview.src = "";
+  uploadedPreview.classList.add("hidden");
+  uploadedFile = null;
+
   updatePrice();
 }
 
+// Sélection modèle
 function selectModel(i){
   currentModelIndex = i;
   Array.from(variantsContainer.children).forEach((btn,index)=>{
@@ -333,6 +347,7 @@ function selectModel(i){
   });
 }
 
+// Sélection quantité
 function selectVariant(i){
   currentVariantIndex = i;
   Array.from(variantsQuantity.children).forEach((btn,index)=>{
@@ -341,19 +356,34 @@ function selectVariant(i){
   updatePrice();
 }
 
+// Mettre à jour prix
 function updatePrice(){
   priceDiv.textContent = variants[currentVariantIndex].price + "€";
 }
 
+// Retour
 backBtn.onclick = () => {
   productPage.classList.remove("visible"); productPage.classList.add("hidden");
   home.classList.remove("hidden"); home.classList.add("visible");
 };
 
+// Upload image avec aperçu
 customUpload.onchange = (e)=>{
   uploadedFile = e.target.files[0];
+  if(uploadedFile){
+    const reader = new FileReader();
+    reader.onload = function(event){
+      uploadedPreview.src = event.target.result;
+      uploadedPreview.classList.remove("hidden");
+    }
+    reader.readAsDataURL(uploadedFile);
+  } else {
+    uploadedPreview.src = "";
+    uploadedPreview.classList.add("hidden");
+  }
 };
 
+// Envoyer commande vers Telegram
 buyBtn.onclick = () => {
   let msg = `Commande pour ${currentProduct.title}`;
   if(currentProduct.models && currentProduct.models[currentModelIndex]){
@@ -367,12 +397,14 @@ buyBtn.onclick = () => {
   window.open(telegramLink, "_blank");
 };
 
+// Entrer boutique
 function enterShop(){
   document.getElementById("categoryModal").style.display = "none";
   loadCategory("Mariage / Anniversaire");
   categorySelect.value = "Mariage / Anniversaire";
 }
 
+// Changement catégorie
 categorySelect.onchange = () => {
   const selected = categorySelect.value;
   if(!selected) return;
@@ -385,8 +417,42 @@ categorySelect.onchange = () => {
   } else {
     loadCategory(selected);
   }
-};
-</script>
+}
 
+// --- TRADUCTION ---
+const translations = {
+  fr:{
+    welcome:"Bienvenue chez Gravure2TesDésirs",
+    btnPersonalized:"Nos produits personnalisés",
+    btnSpecial:"Votre personnalisation gravure ajustée",
+    upload:"Envoyez votre gravure :"
+  },
+  en:{
+    welcome:"Welcome to Gravure2TesDésirs",
+    btnPersonalized:"Our personalized products",
+    btnSpecial:"Your custom engraving request",
+    upload:"Upload your engraving:"
+  },
+  es:{
+    welcome:"Bienvenido a Gravure2TesDésirs",
+    btnPersonalized:"Nuestros productos personalizados",
+    btnSpecial:"Su solicitud de grabado personalizado",
+    upload:"Sube tu grabado:"
+  },
+  pt:{
+    welcome:"Bem-vindo ao Gravure2TesDésirs",
+    btnPersonalized:"Nossos produtos personalizados",
+    btnSpecial:"Seu pedido de gravação personalizada",
+    upload:"Envie sua gravação:"
+  }
+};
+
+function setLanguage(lang){
+  document.getElementById("welcome-text").textContent = translations[lang].welcome;
+  document.getElementById("btn-personalized").textContent = translations[lang].btnPersonalized;
+  document.getElementById("btn-special").textContent = translations[lang].btnSpecial;
+  document.getElementById("label-upload").textContent = translations[lang].upload;
+}
+</script>
 </body>
 </html>
