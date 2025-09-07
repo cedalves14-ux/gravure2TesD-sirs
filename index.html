@@ -1,6 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Gravure2TesDésirs — Boutique Telegram</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0f0f1a;
+      --card:#ffffff;
+      --accent:#00ff66;
+      --accent-dark:#009944;
+      --success:#28a745;
+      --muted:#6b7280;
+      --radius:12px;
+      --gap:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,"Segoe UI",Arial,sans-serif;
+      background:var(--bg);
+      color:#fff;
+      position:relative;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      top:0;left:0;
+      width:100%;height:100%;
+      background:url('Header2.png') center/cover no-repeat;
+      filter:blur(25px) brightness(0.35);
+      z-index:-1;
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:40;
+      background:rgba(0,0,0,0.6);
+      backdrop-filter:blur(4px);
+      padding:8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      box-shadow:0 1px 0 rgba(0,0,0,0.3);
+    }
+    header img{height:60px;object-fit:contain;display:block}
+    main{padding:16px;max-width:1100px;margin:0 auto}
+    h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
+
+    /* Sélecteur de catégorie */
+    .category-select {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .category-select:hover {
+      background: var(--accent-dark);
+    }
+
+    /* Grille produits */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:var(--gap);
+      margin-bottom:18px
+    }
+
+    .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 6px 18px rgba(12,18,28,0.3);cursor:pointer;display:flex;flex-direction:column;transition:transform .16s,box-shadow .16s}
+    .card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 14px 30px rgba(12,18,28,0.5)}
+    .media-wrap{height:140px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center}
+    .media-wrap img,.media-wrap video{width:100%;height:100%;object-fit:cover}
+    .card-body{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1;justify-content:space-between}
+    .card h3{margin:0;font-size:1rem;color:#111;text-align:center}
+    .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.06);color:var(--muted);font-size:13px;text-align:center;margin:auto 0 0}
+
+    /* Page produit */
+    #product-page{display:none;padding-top:8px}
+    .product-card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 12px 30px rgba(12,18,28,0.3)}
+    .product-media{width:100%;height:260px;border-radius:10px;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+    .product-media img,.product-media video{width:100%;height:100%;object-fit:cover}
+    .desc{color:var(--muted);line-height:1.45;margin-bottom:8px}
+    .variants{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    .variant-btn{
+      padding:10px 14px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      background:#f3f6f9;
+      color:#111;
+      transition:transform .1s, background .2s, color .2s;
+      flex:1 1 calc(50% - 8px);
+      text-align:center;
+    }
+    .variant-btn.selected{
+      background:var(--accent);
+      color:white;
+    }
+    .price{margin-top:8px;font-weight:700;font-size:1.15rem;color:var(--success)}
+    .actions{display:grid;gap:10px;margin-top:12px}
+    .btn{padding:12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s}
+    .btn svg{width:20px;height:20px;stroke-width:2}
+    .btn:active{transform:scale(0.96)}
+    .btn-buy{background:var(--success);color:white}
+    .btn-contact{background:var(--accent);color:white}
+    .btn-back{background:#eef2f7;color:#111}
+    #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:#0f1724;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 8px 30px rgba(2,6,23,0.4);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+    #toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+
+    /* POPUP */
+    #categoryModal {
+      position:fixed;
+      top:0;left:0;
+      width:100%;height:100%;
+      background:rgba(0,0,0,0.85);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:100;
+    }
+    .modal-content {
+      background:#1f1f2e;
+      padding:24px;
+      border-radius:16px;
+      text-align:center;
+      box-shadow:0 10px 40px rgba(0,0,0,0.6);
+      max-width:400px;
+    }
+    .modal-content h2 {margin-bottom:20px;color:#fff;}
+    .category-options {display:flex;gap:20px;justify-content:center;}
+    .category-btn {
+      border:none;background:none;cursor:pointer;text-align:center;
+      color:#fff;font-weight:700;transition:transform .2s;
+    }
+    .category-btn img {
+      width:120px;height:120px;border-radius:12px;object-fit:cover;display:block;margin-bottom:8px;
+    }
+    .category-btn:hover {transform:scale(1.05);}
+
+    /* Transitions page */
+    .fade {transition: opacity 0.3s ease;}
+    .hidden {display:none !important; opacity:0 !important;}
+    .visible {display:block !important; opacity:1 !important;}
+  </style>
+</head>
+<body>
+
+<!-- POPUP -->
+<div id="categoryModal">
+  <div class="modal-content">
+    <h2>Bienvenue chez Gravure2TesDésirs</h2>
+    <div class="category-options">
+      <button class="category-btn" onclick="enterShop()">
+        <img src="produits.jpg" alt="Produits personnalisés"/>
+        Nos produits personnalisés
+      </button>
+      <button class="category-btn" onclick="window.open('https://t.me/k3ks9','_blank')">
+        <img src="personnalisation.jpg" alt="Demande spéciale"/>
+        Votre personnalisation gravure ajustée
+      </button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <img src="Header2.png" alt="Gravure2TesDésirs"/>
+  <select id="categorySelect" class="category-select">
+    <option value="" disabled selected>Choisir une catégorie</option>
+  </select>
+</header>
+
+<main>
+  <section id="home-page" class="fade visible">
+    <h2 id="category-title">Produits disponibles</h2>
+    <div class="grid" id="products-grid"></div>
+  </section>
+
+  <section id="product-page" class="fade hidden">
+    <div class="product-card">
+      <div class="product-media" id="product-media"></div>
+      <h3 id="product-title"></h3>
+      <p class="desc" id="product-desc"></p>
+      <div class="variants" id="variants-container"></div>
+      <div class="price" id="price"></div>
+      <div class="actions">
+        <button class="btn btn-buy" id="buyBtn">Envoyer ma demande à Gravure2TesDésirs</button>
+        <a href="https://t.me/k3ks9" target="_blank" class="btn btn-contact">Contact Telegram</a>
+        <button class="btn btn-back" id="backBtn">← Retour</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-// === Variantes (prix) ===
+// Variantes
 const variants = [
   {label:"1 pièce", price:10},
   {label:"5 pièces", price:45},
@@ -8,7 +209,7 @@ const variants = [
   {label:"20 pièces", price:160}
 ];
 
-// === Catégories avec produits exemples ===
+// Catégories et produits
 const categories = {
   "Mariage / Anniversaire": [
     { id:1, title:"Coffret Mariage", desc:"Un coffret gravé unique pour votre mariage.", media:"Header2.png" },
@@ -28,7 +229,6 @@ const categories = {
   ]
 };
 
-// === DOM Elements ===
 const grid = document.getElementById("products-grid");
 const home = document.getElementById("home-page");
 const productPage = document.getElementById("product-page");
@@ -46,7 +246,7 @@ let currentProduct = null;
 let currentVariantIndex = 0;
 let currentCategory = null;
 
-// === Remplir le menu déroulant ===
+// Remplir menu déroulant
 Object.keys(categories).forEach(cat => {
   const opt = document.createElement("option");
   opt.value = cat;
@@ -54,7 +254,7 @@ Object.keys(categories).forEach(cat => {
   categorySelect.appendChild(opt);
 });
 
-// === Charger une catégorie ===
+// Charger catégorie
 function loadCategory(category){
   currentCategory = category;
   grid.innerHTML = "";
@@ -77,23 +277,23 @@ function loadCategory(category){
   });
 }
 
-// === Afficher la fiche produit ===
+// Afficher produit
 function showProduct(p){
   currentProduct = p;
-  home.style.display = "none";
-  productPage.style.display = "block";
-  productPage.style.opacity = 1;
+  home.classList.add("hidden");
+  productPage.classList.remove("hidden");
+  productPage.classList.add("visible");
 
   productMedia.innerHTML = `<img src="${p.media}" alt="">`;
   productTitle.textContent = p.title;
   productDesc.textContent = p.desc;
 
   variantsContainer.innerHTML = "";
-  variants.forEach((v, index) => {
+  variants.forEach((v,index)=>{
     const btn = document.createElement("button");
-    btn.className = "variant-btn" + (index === 0 ? " selected" : "");
+    btn.className = "variant-btn" + (index===0?" selected":"");
     btn.textContent = `${v.label} — ${v.price}€`;
-    btn.onclick = () => selectVariant(index);
+    btn.onclick = ()=>selectVariant(index);
     variantsContainer.appendChild(btn);
   });
 
@@ -101,62 +301,56 @@ function showProduct(p){
   updatePrice();
 }
 
-// === Sélection variante ===
+// Variantes
 function selectVariant(index){
   currentVariantIndex = index;
-  Array.from(variantsContainer.children).forEach((btn, i) => {
-    btn.classList.toggle("selected", i === index);
+  Array.from(variantsContainer.children).forEach((btn,i)=>{
+    btn.classList.toggle("selected", i===index);
   });
   updatePrice();
 }
-
 function updatePrice(){
   priceDiv.textContent = variants[currentVariantIndex].price + "€";
 }
 
-// === Bouton retour ===
-backBtn.onclick = () => {
-  home.style.display = "block"; 
-  productPage.style.display = "none";
+// Retour
+backBtn.onclick = ()=>{
+  productPage.classList.remove("visible");
+  productPage.classList.add("hidden");
+  home.classList.remove("hidden");
+  home.classList.add("visible");
 };
 
-// === Bouton acheter ===
-buyBtn.onclick = () => {
+// Acheter
+buyBtn.onclick = ()=>{
   alert(`Commande envoyée pour ${currentProduct.title} — ${variants[currentVariantIndex].label} à ${variants[currentVariantIndex].price}€ !`);
 };
 
-// === Popup accueil ===
+// Popup accueil
 function enterShop(){
-  document.getElementById("categoryModal").style.display = "none";
+  document.getElementById("categoryModal").style.display="none";
   loadCategory("Mariage / Anniversaire");
-  categorySelect.value = "Mariage / Anniversaire";
+  categorySelect.value="Mariage / Anniversaire";
 }
 
-// === Menu déroulant avec transition fluide ===
-categorySelect.onchange = () => {
+// Menu déroulant avec retour automatique sur page liste
+categorySelect.onchange = ()=>{
   const selectedCat = categorySelect.value;
-  if (selectedCat) {
-    if (productPage.style.display === "block") {
-      productPage.style.opacity = 1;
-      const fadeOut = setInterval(() => {
-        productPage.style.opacity -= 0.1;
-        if (productPage.style.opacity <= 0) {
-          clearInterval(fadeOut);
-          productPage.style.display = "none";
-          home.style.display = "block";
-          home.style.opacity = 0;
+  if(!selectedCat) return;
 
-          loadCategory(selectedCat);
-
-          const fadeIn = setInterval(() => {
-            home.style.opacity = parseFloat(home.style.opacity) + 0.1;
-            if (home.style.opacity >= 1) clearInterval(fadeIn);
-          }, 30);
-        }
-      }, 30);
-    } else {
+  if(!productPage.classList.contains("hidden")){
+    productPage.classList.remove("visible");
+    productPage.classList.add("hidden");
+    setTimeout(()=>{
+      home.classList.remove("hidden");
+      home.classList.add("visible");
       loadCategory(selectedCat);
-    }
+    }, 300);
+  }else{
+    loadCategory(selectedCat);
   }
 };
 </script>
+
+</body>
+</html>
