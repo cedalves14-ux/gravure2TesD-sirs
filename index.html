@@ -80,7 +80,7 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
 .product-media{width:100%;height:260px;border-radius:10px;overflow:hidden;background:#eee;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
 .product-media img,.product-media video{width:100%;height:100%;object-fit:cover}
 .desc{color:var(--muted);line-height:1.45;margin-bottom:8px}
-.variants{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.variants, .variants-quantity{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
 .variant-btn{
   padding:6px;
   border-radius:10px;
@@ -184,6 +184,7 @@ h2{margin:8px 0 12px;font-size:1.05rem;color:#00ff66}
       <h3 id="product-title"></h3>
       <p class="desc" id="product-desc"></p>
       <div class="variants" id="variants-container"></div>
+      <div class="variants-quantity" id="variants-quantity"></div>
 
       <!-- Upload d'image -->
       <div style="margin-top:12px;">
@@ -209,7 +210,6 @@ const variants = [
   {label:"20 pièces", price:160}
 ];
 
-// Ajouter un tableau "models" pour tous les produits
 const categories = {
   "Mariage / Anniversaire":[
     {id:1,title:"Coffret Mariage",desc:"Un coffret gravé unique pour votre mariage.",media:"Header2.png",
@@ -252,6 +252,7 @@ const productMedia = document.getElementById("product-media");
 const productTitle = document.getElementById("product-title");
 const productDesc = document.getElementById("product-desc");
 const variantsContainer = document.getElementById("variants-container");
+const variantsQuantity = document.getElementById("variants-quantity");
 const priceDiv = document.getElementById("price");
 const buyBtn = document.getElementById("buyBtn");
 const backBtn = document.getElementById("backBtn");
@@ -260,8 +261,8 @@ const categorySelect = document.getElementById("categorySelect");
 const customUpload = document.getElementById("customUpload");
 
 let currentProduct = null;
-let currentVariantIndex = 0;
 let currentModelIndex = 0;
+let currentVariantIndex = 0;
 let uploadedFile = null;
 
 // Remplir menu déroulant
@@ -293,10 +294,9 @@ function showProduct(p){
   productTitle.textContent = p.title;
   productDesc.textContent = p.desc;
 
+  // Modèles
   variantsContainer.innerHTML = "";
   currentModelIndex = 0;
-
-  // Affichage des modèles si définis
   if(p.models){
     p.models.forEach((m,i)=>{
       const btn = document.createElement("button");
@@ -307,7 +307,17 @@ function showProduct(p){
     });
   }
 
+  // Quantité
+  variantsQuantity.innerHTML = "";
   currentVariantIndex = 0;
+  variants.forEach((v,i)=>{
+    const btn = document.createElement("button");
+    btn.className = "variant-btn"+(i===0?" selected":"");
+    btn.textContent = `${v.label} — ${v.price}€`;
+    btn.onclick = () => selectVariant(i);
+    variantsQuantity.appendChild(btn);
+  });
+
   updatePrice();
 }
 
@@ -316,6 +326,14 @@ function selectModel(i){
   Array.from(variantsContainer.children).forEach((btn,index)=>{
     btn.classList.toggle("selected", index === i);
   });
+}
+
+function selectVariant(i){
+  currentVariantIndex = i;
+  Array.from(variantsQuantity.children).forEach((btn,index)=>{
+    btn.classList.toggle("selected", index === i);
+  });
+  updatePrice();
 }
 
 function updatePrice(){
@@ -334,19 +352,15 @@ customUpload.onchange = (e)=>{
   }
 };
 
-// Bouton d'achat -> envoi vers Telegram via lien prérempli
 buyBtn.onclick = () => {
   let msg = `Commande pour ${currentProduct.title}`;
   if(currentProduct.models && currentProduct.models[currentModelIndex]){
     msg += ` — Modèle : ${currentProduct.models[currentModelIndex].name}`;
   }
   msg += ` — ${variants[currentVariantIndex].label} à ${variants[currentVariantIndex].price}€`;
-
   if(uploadedFile){
     msg += `\nFichier uploadé : ${uploadedFile.name}`;
   }
-
-  // Préparer un lien Telegram avec message pré-rempli
   const telegramLink = `https://t.me/k3ks9?text=${encodeURIComponent(msg)}`;
   window.open(telegramLink, "_blank");
 };
